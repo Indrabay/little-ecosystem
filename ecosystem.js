@@ -79,7 +79,12 @@ ECOSYSTEM.tweat = (req, res) => {
 
 ECOSYSTEM.home = (req, res) => {
   res.send({
-    data: ECOSYSTEM.feeds
+    data: ECOSYSTEM.feeds.sort(function (a,b){
+      if (a.time > b.time) return -1
+      if (a.time < b.time) return 1
+      if (a.id > b.id) return -1
+      if (a.id < b.id) return 1
+    })
   })
 }
 
