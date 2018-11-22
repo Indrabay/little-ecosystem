@@ -1,0 +1,16 @@
+{
+  "name": "ecosystem",
+  "version": "1.0.0",
+  "description": "food chain simulation",
+  "main": "index.js",
+  "author": "Indra Bayu Kusuma",
+  "license": "none",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4"
+  }
+}
