@@ -45,9 +45,9 @@ ECOSYSTEM.tweat = (req, res) => {
   let body = req.body
   let params = req.params
 
-  let validate = ECOSYSTEM.ecosystem.find(elm => elm.predator === Number(params.species_id) && elm.food === Number(body.target_id))
+  let validate = ECOSYSTEM.relations.find(elm => elm.predator === Number(params.species_id) && elm.food === Number(body.target_id))
 
-  if (validate) {
+  if (!validate) {
     return res.send({
       success: false
     })
@@ -97,6 +97,14 @@ ECOSYSTEM.getProfile = (req, res) => {
 ECOSYSTEM.reply = (req, res) => {
   let params = req.params
   let body = req.body
+
+  let feed = ECOSYSTEM.feeds.find(elm => elm.id === Number(params.feed_id))
+
+  if (!feed) {
+    return res.send({
+      success: false
+    })
+  }
 
   ECOSYSTEM.feeds.push({
     id: ECOSYSTEM.feedCounter,

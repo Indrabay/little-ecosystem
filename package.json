@@ -4,7 +4,7 @@
   "description": "food chain simulation",
   "main": "index.js",
   "author": "Indra Bayu Kusuma",
-  "license": "none",
+  "license": "MIT",
   "scripts": {
     "start": "node server.js"
   },
