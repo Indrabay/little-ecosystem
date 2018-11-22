@@ -151,3 +151,56 @@ describe("Test data", () => {
     expect(send.mock.calls[0][0]).toHaveProperty('success', false)
   })
 })
+
+describe("Test with mock data", () => {
+  beforeEach(() => {
+    ecosystem.feeds = [
+      {
+        id: 2,
+        content: "Aku dimakan @1",
+        time: 1542891049,
+        reference_id: 1,
+        species_id: 2
+      },
+      {
+        id: 1,
+        content: "wah kalian saling memakan nih",
+        time: 1542891075,
+        reference_id: 1,
+        species_id: 3
+      }
+    ]
+  })
+
+  afterEach(() => {
+    ecosystem.feeds = []
+  })
+
+  it("Check home return with sorted data by newest", () => {
+    let expectedResult = [
+      {
+        id: 1,
+        content: "wah kalian saling memakan nih",
+        time: 1542891075,
+        reference_id: 1,
+        species_id: 3
+      },
+      {
+        id: 2,
+        content: "Aku dimakan @1",
+        time: 1542891049,
+        reference_id: 1,
+        species_id: 2
+      }
+    ]
+
+    const send = jest.fn()
+    const res = {
+      send
+    }
+
+    ecosystem.home({}, res)
+
+    expect(send.mock.calls[0][0].data).toEqual(expectedResult)
+  })
+})
