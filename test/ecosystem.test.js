@@ -1,4 +1,4 @@
-const ecosystem = require("./ecosystem")
+const ecosystem = require("../ecosystem")
 
 describe("Check property", () => {
   it("Check getEcosystem property to have data", () => {
@@ -62,9 +62,9 @@ describe("Check property", () => {
     }
 
     ecosystem.getProfile(req, res)
-    expect(send.mock.calls[0][0]).toHaveProperty('id')
-    expect(send.mock.calls[0][0]).toHaveProperty('name')
-    expect(send.mock.calls[0][0]).toHaveProperty('feeds')
+    expect(send.mock.calls[0][0].data).toHaveProperty('id')
+    expect(send.mock.calls[0][0].data).toHaveProperty('name')
+    expect(send.mock.calls[0][0].data).toHaveProperty('feeds')
   })
 })
 
@@ -139,7 +139,7 @@ describe("Test data", () => {
       },
       params: {
         species_id: '3',
-        feed_id: '1000'
+        feed_id: 'a'
       }
     }
     const send = jest.fn()
@@ -202,5 +202,97 @@ describe("Test with mock data", () => {
     ecosystem.home({}, res)
 
     expect(send.mock.calls[0][0].data).toEqual(expectedResult)
+  })
+})
+
+describe("Test phase 2", () => {
+  it("Check addSpecies success true", () => {
+    const req = {
+      body: {
+        name: 'human'
+      }
+    }
+    const send = jest.fn()
+    const res = {
+      send
+    }
+
+    ecosystem.addSpecies(req, res)
+    expect(send.mock.calls[0][0]).toHaveProperty('success', true)
+  })
+
+  it("Check addSpecies success false", () => {
+    const req = {
+      body: {
+        name: 'lion'
+      }
+    }
+    const send = jest.fn()
+    const res = {
+      send
+    }
+
+    ecosystem.addSpecies(req, res)
+    expect(send.mock.calls[0][0]).toHaveProperty('success', false)
+  })
+
+  it("Check addRelations success true", () => {
+    const req = {
+      body: {
+        predator: 1,
+        food: 3
+      }
+    }
+    const send = jest.fn()
+    const res = {
+      send
+    }
+
+    ecosystem.addRelation(req, res)
+    expect(send.mock.calls[0][0]).toHaveProperty('success', true)
+  })
+
+  it("Check addRelations success false with food and predator are same", () => {
+    const req = {
+      body: {
+        predator: 1,
+        food: 1
+      }
+    }
+    const send = jest.fn()
+    const res = {
+      send
+    }
+
+    ecosystem.addRelation(req, res)
+    expect(send.mock.calls[0][0]).toHaveProperty('success', false)
+  })
+
+  it("Check addRelations success false with food or predator not in ecosystem", () => {
+    const req = {
+      body: {
+        predator: 'a',
+        food: 1
+      }
+    }
+    const send = jest.fn()
+    const res = {
+      send
+    }
+
+    ecosystem.addRelation(req, res)
+    expect(send.mock.calls[0][0]).toHaveProperty('success', false)
+  })
+
+  it("Check getRelations return object to have property data and in data have property food and predator", () => {
+    const send = jest.fn()
+    const res = {
+      send
+    }
+
+    ecosystem.getRelations({}, res)
+    expect(send.mock.calls[0][0]).toHaveProperty('data')
+    expect(send.mock.calls[0][0].data[0]).toHaveProperty('predator')
+    expect(send.mock.calls[0][0].data[0]).toHaveProperty('food')
   })
 })
